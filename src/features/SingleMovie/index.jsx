@@ -1,18 +1,24 @@
 import { useParams } from "react-router-dom";
-import { useGetSingleMovieQuery } from "../../services/Redux/MovieDbSlice";
+import {
+  useGetMovieCastDetailQuery,
+  useGetSingleMovieQuery,
+} from "../../services/Redux/MovieDbSlice";
 import dayjs from "dayjs";
 import SingleMovieBody from "../../layouts/SingleMovieBody";
+import "./style/style.css";
 
 const SingleMovie = () => {
   const { id } = useParams();
 
   const URL = import.meta.env.VITE_APP_IMAGE_URL;
 
-  const { data } = useGetSingleMovieQuery(id);
+  const { data, isFetching } = useGetSingleMovieQuery(id);
+
+  const MovieCastDetailRes = useGetMovieCastDetailQuery(id);
 
   return (
     <>
-      <SingleMovieBody>
+      <SingleMovieBody isFetching={isFetching}>
         <div className="px-5 lg:py-5">
           {/* Overview */}
           <div className="rounded overflow-hidden grid lg:grid-cols-2 grid-cols-1 gap-2 bg-singleBackColor text-white">
@@ -37,8 +43,8 @@ const SingleMovie = () => {
                         {data.runtime} min
                       </p>
                       <p className="flex gap-2">
-                        {data.genres?.map((item) => (
-                          <span>{item.name}</span>
+                        {data.genres?.map((item, index) => (
+                          <span key={index}>{item.name}</span>
                         ))}
                       </p>
                     </div>
@@ -67,6 +73,35 @@ const SingleMovie = () => {
             )}
           </div>
           {/* Casts */}
+          <div className="my-3">
+            <h1 className="text-2xl text-white">Cast</h1>
+          </div>
+          <div className="flex gap-5 h-full overflow-x-scroll overflow-y-hidden customScroll">
+            {MovieCastDetailRes.data?.cast?.length !== 0 ? (
+              MovieCastDetailRes.data?.cast?.map((item) => (
+                <>
+                  {item.profile_path !== null ? (
+                    <div className="w-64 h-full shrink-0">
+                      <img
+                        src={`${URL}${item.profile_path}`}
+                        className="h-64 w-full rounded"
+                        alt=""
+                      />
+                      <div className="text-white">
+                        <p className="text-lg">{item.name}</p>
+                        <p className="text-sm text-blue-400">
+                          Character :
+                          <span className="text-white pl-1">{item.character}</span>
+                        </p>
+                      </div>
+                    </div>
+                  ) : null}
+                </>
+              ))
+            ) : (
+              <h1>No Data Found</h1>
+            )}
+          </div>
         </div>
       </SingleMovieBody>
     </>

@@ -11,8 +11,8 @@ export const MovieDbSlice = createApi({
   keepUnusedDataFor: cachedDataTime,
   endpoints: (builder) => ({
     getAllMovies: builder.query({
-      query: () => ({
-        url: `movie/popular?api_key=${API_KEY}&page=${1}`,
+      query: (page) => ({
+        url: `movie/popular?api_key=${API_KEY}&page=${page}`,
         method: "GET",
       }),
       transformResponse: (response) => response,
@@ -24,23 +24,37 @@ export const MovieDbSlice = createApi({
       }),
       transformResponse: (response) => response,
     }),
+    getMovieCastDetail: builder.query({
+      query: (payload) => ({
+        url: `movie/${payload}/credits?api_key=${API_KEY}`,
+        method: "GET",
+      }),
+      transformResponse: (response) => response,
+    }),
     getPopularMovie: builder.query({
-      query: () => ({
-        url: `movie/top_rated?api_key=${API_KEY}&page=${1}`,
+      query: (page) => ({
+        url: `movie/top_rated?api_key=${API_KEY}&page=${page}`,
         method: "GET",
       }),
       transformResponse: (response) => response,
     }),
     getTopRatedMovie: builder.query({
-      query: () => ({
-        url: `movie/top_rated?api_key=${API_KEY}&page=${1}`,
+      query: (page) => ({
+        url: `movie/top_rated?api_key=${API_KEY}&page=${page}`,
         method: "GET",
       }),
       transformResponse: (response) => response,
     }),
     getUpcomingMovie: builder.query({
-      query: () => ({
-        url: `movie/upcoming?api_key=${API_KEY}&page=${1}`,
+      query: (page) => ({
+        url: `movie/upcoming?api_key=${API_KEY}&page=${page}`,
+        method: "GET",
+      }),
+      transformResponse: (response) => response,
+    }),
+    getMovieBySearch: builder.query({
+      query: ({ InputSearch, page }) => ({
+        url: `search/movie?api_key=${API_KEY}&query=${InputSearch}&page=${page}`,
         method: "GET",
       }),
       transformResponse: (response) => response,
@@ -51,7 +65,9 @@ export const MovieDbSlice = createApi({
 export const {
   useGetAllMoviesQuery,
   useGetSingleMovieQuery,
+  useGetMovieCastDetailQuery,
   useGetPopularMovieQuery,
   useGetTopRatedMovieQuery,
   useGetUpcomingMovieQuery,
+  useLazyGetMovieBySearchQuery,
 } = MovieDbSlice;

@@ -21,10 +21,14 @@ export const PaginationSlice = createSlice({
       ...state,
       limit: limit,
     }),
+    setResetPagination: (state) => ({
+      ...state,
+      page: paginateObj.page,
+    }),
   },
 });
 
-export const { setnextPage, setpreviousPage, setTotalRows, setPageLimit } =
+export const { setnextPage, setpreviousPage, setTotalRows, setPageLimit, setResetPagination } =
   PaginationSlice.actions;
 
 export default PaginationSlice.reducer;

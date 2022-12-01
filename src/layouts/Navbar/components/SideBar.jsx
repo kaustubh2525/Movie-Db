@@ -1,16 +1,25 @@
+import { useContext, useRef } from "react";
 import { Link } from "react-router-dom";
 import Button from "../../../components/Button";
 import InputField from "../../../components/InputField";
 import { NavItems } from "../constants/constants";
 import { GiHamburgerMenu } from "react-icons/gi";
+import GlobalContext from "../../../context/GlobalContext";
 import "../style/style.css";
-import { useRef } from "react";
 
 const SideBar = () => {
+  const { InputSearch, setInputSearch } = useContext(GlobalContext);
+
   const MenuRef = useRef();
 
   const handleToggleMenu = () => {
     MenuRef.current.classList.toggle("hide");
+  };
+
+  const handleChange = (event) => {
+    const { value } = event.target;
+
+    setInputSearch(() => value);
   };
 
   return (
@@ -32,15 +41,17 @@ const SideBar = () => {
         <InputField
           type={"text"}
           name="search"
-          placeholder={"movie name"}
+          placeholder={"search movie name"}
+          onChange={handleChange}
+          value={InputSearch}
           className={"bg-gray-200 text-gray-700 rounded-md lg:w-auto w-full"}
         />
-        <Button
+        {/* <Button
           className={
             "bg-btn-color hover:bg-gray-600 transition-all duration-200 ease-in-out text-gray-100 lg:w-auto w-full"
           }
           BtnText="Search"
-        />
+        /> */}
       </div>
       <div className="lg:hidden block">
         <GiHamburgerMenu
